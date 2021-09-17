@@ -1,0 +1,14 @@
+package pro;
+
+public class testbean {
+
+	private Object pic;
+
+	public Object getPic() {
+		return pic;
+	}
+
+	public void setPic(Object pic) {
+		this.pic = pic;
+	}
+}

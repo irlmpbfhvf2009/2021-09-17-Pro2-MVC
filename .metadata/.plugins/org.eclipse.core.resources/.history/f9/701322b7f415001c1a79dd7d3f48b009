@@ -1,0 +1,33 @@
+<%@ page language="java" contentType="text/html; charset=BIG5"
+    pageEncoding="BIG5"%>
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>jQuery上傳圖片時，可以顯示圖片預覽效果</title>
+		<script src="js/jquery-3.2.1.min.js"></script>
+	</head>
+
+	<body>
+		<input id="myfile" type="file"><br/>
+		<img src="" id="show" width="200">
+		<script type="text/javascript">
+			$(function() {
+
+				$("#myfile").change(function() {
+					var readFile = new FileReader();
+					var mfile = $("#myfile")[0].files[0];  //注意這裡必須時$("#myfile")[0]，document.getElementById('file')等價與$("#myfile")[0]
+					readFile.readAsDataURL(mfile);
+					readFile.onload = function() {
+						var img = $("#show");
+						img.attr("src", this.result);
+					}
+
+				});
+
+			})
+		</script>
+	</body>
+
+</html>

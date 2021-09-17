@@ -1,0 +1,5 @@
+INDEX VERSION 1.131
+D:\PRO2\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\182504701.index
+\Groupon\src\main\java
+D:\PRO2\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\547290388.index
+\Hw2Test\src\main\java

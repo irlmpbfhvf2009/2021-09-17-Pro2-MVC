@@ -1,0 +1,178 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<sql:setDataSource var="ds" dataSource="jdbc/Pro2DB" />
+<% String query=request.getSession(true).getAttribute("productid").toString(); %>
+<sql:query sql="select * from GrouponProduct where id ='${productid}'" var="rs" dataSource="${ds}" />
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>修改商品</title>
+<link rel="stylesheet" href="style.css">
+<style>
+input[type="file"] {
+	position: fixed;
+	right: 100%;
+	bottom: 100%;
+}
+
+.custom-file-upload {
+	border: 1px solid #ccc;
+	display: inline-block;
+	padding: 6px 12px;
+	cursor: pointer;
+}
+img{float=none;}
+</style>
+</head>
+
+<body>
+	<div class="divform">
+		<h1>修改商品</h1>
+		<form action="./ProServlet" method="post">
+		<c:forEach var="row" items="${rs.rows}">
+			<!-- 團主名稱 -->
+			<strong>團主名稱 </strong>
+			<input type="text" id="leader" name="leader" placeholder="請輸入名字" value="${row.leader}">
+			<span id="idspleader"></span><br><span class="spanText">(1.不可空白2.至少兩個字3.不能有特殊符號)</span><br>
+			
+			<!-- 商品名稱 -->
+			<strong>商品名稱 </strong><input type="text" id="productName" name="productName" placeholder="商品名稱" value="${row.productname}">
+			<span id="idspproductName">
+			
+			<!-- 數量 -->
+			</span><br><strong>數量 </strong><input type="text" id="quantity" name="quantity" size="3" value="${row.quantity}"><br>
+			
+			<!-- 原價 -->
+			<strong>原價 </strong><input type="text" class="price" name="price" size="3" value="${row.price}"><br> 
+			
+			<!-- 折扣 -->
+			<strong>折扣 </strong><input type="text" class="discount" name="discount" size="3" placeholder="　　折" value="${row.discount}">
+			<span class="spdiscount"></span><br> 
+			
+			<!-- 優惠價 -->
+			<strong>優惠價 </strong><input type="text" class="newprice" name="newprice" size="3" readonly><br>
+			
+			<!-- 日期 -->
+			<strong>日期 </strong><input type="date" name="date" size="4" id="dt" readonly><br><br>
+			
+			<!-- 截止日 -->
+			<strong>截止日 </strong><input type="date" name="deadline" size="4" id="dt" value="${row.deadline}"><br><br>
+			
+			<!-- 圖片 -->
+			<label for="file-upload" class="custom-file-upload"><i class="fa fa-cloud-upload"></i> 圖片上傳</label> 
+			<input id="file-upload" type="file" name="img" /><br><br> 
+			
+			<input type="submit" name="updatabtn" style="margin-top: 50px;" class="sgbtn">
+			<a href="Home.jsp"><input type="button" name="cancel" class="sgbtn" value="取消"></a>
+			</c:forEach>
+		</form>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script>
+	$(function(){
+		// 資料空值談窗
+		$('.sgbtn').on('click',function(){
+			switch(true){
+            case leader.value=="":
+                alert('請輸入姓名');
+                window.event.returnValue=false;
+                break;
+            case productname.value=="":
+                alert('請輸入商品名稱');
+                window.event.returnValue=false;
+                break;
+            case quantity.value=="":
+                alert('請輸入數量');
+                window.event.returnValue=false;
+                break;    
+            case price.value=="":
+                alert('請輸入價錢');
+                window.event.returnValue=false;
+                break;    
+            case discount.value=="":
+                alert('請輸入折扣');
+                window.event.returnValue=false;
+                break;  
+			}
+		})
+	    // 優惠價驗證
+		$('.price,.discount').on('change blur focus',function(){
+			if($('.discount').val()<10){
+				$('.newprice').val(parseInt($('.price').val()*$('.discount').val()/10));
+				$('.spdiscount').html('');
+			}else if($('.discount').val()>10&&$('.discount').val()<100){
+				$('.newprice').val(parseInt($('.price').val()*$('.discount').val()/100));
+				$('.spdiscount').html('');
+			}else{
+				$('.spdiscount').html("<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/753/753345.png'>格式錯誤");
+			}
+		});
+	})
+    document.getElementById("dt").valueAsDate = new Date();
+    let leader = document.getElementById("leader");
+    let productname = document.getElementById("productName");
+    let quantity = document.getElementById("quantity");
+    let price = document.getElementById("price");
+    let discount = document.getElementById("discount");
+    
+    discount.addEventListener('change',function(){
+		let priceval=price.value;
+		let discountval=discount.value;
+        let newprice=document.getElementById("newprice");
+		let idspdiscount = document.getElementById('idspdiscount');
+		if(discountval<10){
+        newprice.value=parseInt(priceval*discountval/10);
+		}else if(discountval>10&&discountval<100){
+			newprice.value=parseInt(priceval*discountval/100);
+		}else{
+			idspdiscount.innerHTML="<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/753/753345.png'>格式錯誤";
+		}
+    })
+    
+    leader.addEventListener("blur", checkleader);
+    productname.addEventListener("blur",checkproductName);
+	function checkleader() {
+		let nameObj = document.getElementById("leader");
+		let nameObjVal = nameObj.value;
+		let spname = document.getElementById("idspleader");
+		let nameObjValLen = nameObjVal.length;
+		let flag = false;
+		if (nameObjValLen == 0) {
+			spname.innerHTML = "<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/753/753345.png'>不可空白";
+		} else if (nameObjValLen < 2) {
+			spname.innerHTML = "<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/753/753345.png'>長度不足";
+		} else if (nameObjValLen > 1) {
+			for (let i = 0; i < nameObjValLen; i++) {
+				let ch = nameObjVal.charCodeAt(i);
+				if (ch >= 0x4e00 && ch <= 0x9fff)
+					flag = true;
+				else {
+					flag = false;
+					break;
+				}
+			}
+			if (flag)
+				spname.innerHTML = "<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/1828/1828640.png'>";
+			else
+				spname.innerHTML = "<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/753/753345.png'>格式錯誤"
+		}
+	}
+	function checkproductName() {
+		let snameObj = document.getElementById("productName");
+		let snameObjVal = snameObj.value;
+		let spname = document.getElementById("idspproductName");
+		let snameObjValLen = snameObjVal.length;
+		let flag = false;
+		if (snameObjValLen == 0) {
+			spname.innerHTML = "<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/753/753345.png'>不可空白";
+		}else{
+			spname.innerHTML ="<img style='width:15px' src='https://cdn-icons-png.flaticon.com/128/1828/1828640.png'>";
+		}
+	}
+
+	</script>
+</body>
+</html>

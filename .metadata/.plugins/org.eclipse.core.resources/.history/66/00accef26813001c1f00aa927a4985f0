@@ -1,0 +1,83 @@
+package pro;
+
+import java.sql.*;
+
+
+public class ProDao {
+	  private Connection conn;
+	  public ProDao(Connection conn) {
+			this.conn = conn;
+	  }
+	 
+	  //新增表單資料
+	  public boolean insertForm(ProBean ProData) {
+	    try {
+	      String sqlString = "insert into GrouponProduct values('"
+		                  	   	+ProData.getLeader()+"','"
+			                    +ProData.getProductName()+"','"
+			                    +ProData.getQuantity()+"','"
+	                            + ProData.getPrice()+"','"
+	                            + ProData.getDiscount()+"','"
+	    	                    + ProData.getNewprice()+"','"
+	    	                    + ProData.getDate()+"','"
+	    	                    + ProData.getDeadline()+"','"
+//	    	                    + ProData.getImg()+"','"
+	                            + "F')";
+	      Statement stmt = conn.createStatement();
+		  int updatecount = stmt.executeUpdate(sqlString);
+	      stmt.close();
+	      if (updatecount >= 1) return true;
+	      else                  return false;
+		  } catch (Exception e) {
+		    System.err.println("新增資料時發生錯誤:" + e);
+			return false;
+	    }
+	  }
+	  
+	  // 刪除商品
+	  public boolean deleteData(String productid) {
+		  try {
+			  String sqlString = "delete GrouponProduct where id = '"+productid+"' ";
+			  Statement stmt = conn.createStatement();
+			  int deletecount = stmt.executeUpdate(sqlString);
+			  stmt.close();
+			  if (deletecount >= 1) { 
+				  return true;
+			  }else{
+				  return false;
+			  }
+		  } catch (Exception e) {
+			  System.err.println("刪除資料時發生錯誤: "+ e);
+			  return false;
+		  }
+	  }
+	  
+	  // 修改商品
+	  public boolean updata(String leader, String productName,int quantity, int price,float discount,int newprice,String date,String deadline,String oldid) {
+	    try {
+	      String sqlString = "Update GrouponProduct set leader=?,productname=?"
+	      		+ ",quantity=?,price=?,discount=?,newprice=?,date=?,deadline=? where id=?";
+			  
+				PreparedStatement preState = conn.prepareStatement(sqlString);
+				preState.setString(1, leader);
+				preState.setString(2, productName);
+				preState.setInt(3, quantity);
+				preState.setInt(4, price);
+				preState.setFloat(5, discount);
+				newprice=(int)((discount/10)*price);
+				preState.setInt(6, newprice);
+				preState.setString(7, date);
+				preState.setString(8, deadline);
+				preState.setString(9, oldid);
+				preState.execute();
+				preState.close();
+				
+				
+		  } catch (Exception e) {
+		    System.err.println("修改資料時發生錯誤: "+ e);
+			  return false;
+		  }
+	    return false;
+	  }
+	
+}

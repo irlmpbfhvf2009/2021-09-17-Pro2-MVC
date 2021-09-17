@@ -1,0 +1,8 @@
+
+9月 13, 2021 24:37:21.146 NEW SESSION
+9月 13, 2021 24:37:21.146 [12132:7308:0913/003721.142:ERROR:device_event_log_impl.cc(214)] [00:37:21.141] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: 連結到系統的某個裝置失去作用。 (0x1F)
+9月 13, 2021 24:37:21.146 [12132:7308:0913/003721.142:ERROR:device_event_log_impl.cc(214)] [00:37:21.142] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: 連結到系統的某個裝置失去作用。 (0x1F)
+
+9月 15, 2021 15:15:42.11 NEW SESSION
+9月 15, 2021 15:15:42.11 [22992:3708:0915/151542.010:ERROR:template_url_service.cc(1043)] Search Engines datatype error was encountered: ProcessSyncChanges failed on ChangeType ACTION_DELETE
+9月 15, 2021 15:15:42.11 [22992:3708:0915/151542.010:ERROR:template_url_service.cc(1043)] Search Engines datatype error was encountered: ProcessSyncChanges failed on ChangeType ACTION_DELETE
